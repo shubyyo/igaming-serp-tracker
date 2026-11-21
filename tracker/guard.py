@@ -84,6 +84,10 @@ def assess(urls, verified_history):
 def resolve_refetch(first_urls, second_urls, verified_history):
     """Status and URLs to keep after a re-fetch of a suspect keyword."""
     second_suspect, info = assess(second_urls, verified_history)
+    if not first_urls and not second_urls:
+        # Two empty pages are a fetch problem, not a SERP shift to confirm tomorrow.
+        info["reason"] = "empty on both fetches"
+        return "discarded", None, info
     if not second_suspect:
         return "recovered", second_urls, info
     if jaccard(first_urls, second_urls) >= AGREE_JACCARD:

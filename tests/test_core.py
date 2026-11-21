@@ -93,6 +93,8 @@ class Guard(unittest.TestCase):
         self.assertEqual(guard.resolve_refetch(poisoned, serp("a"), self.hist)[0], "recovered")
         self.assertEqual(guard.resolve_refetch(poisoned, poisoned, self.hist)[0], "quarantined")
         self.assertEqual(guard.resolve_refetch(poisoned, other, self.hist)[0], "discarded")
+        self.assertEqual(guard.resolve_refetch([], [], self.hist)[0], "discarded")
+        self.assertEqual(guard.resolve_refetch([], [], [])[0], "discarded")
         self.assertTrue(guard.confirm_quarantine(poisoned, poisoned))
         self.assertFalse(guard.confirm_quarantine(poisoned, serp("a")))
 
