@@ -169,7 +169,13 @@
     var name = current === 'global' ? 'All markets' : m.name;
     $('#chart-title').textContent = name + ', last ' + (range === 365 ? 'year' : range + ' days');
     box.innerHTML = '';
-    if (!m || !m.series.length) { box.innerHTML = '<p class="muted">No data yet.</p>'; return; }
+    if (!m || !scored(m.series).length) {
+      var since = (m && m.series.length) ? ' Collection started ' + fmt(m.series[0].d, { year: 'numeric' }) + '.' : '';
+      box.innerHTML = '<p class="muted">Collecting the baseline. Volatility compares two days, so the first reading appears after the second day of data.' + since + '</p>';
+      $('#notes').hidden = true;
+      $('#legend').textContent = '';
+      return;
+    }
     var end = day(S.latest_date), start = end - (range - 1) * 864e5;
     var pts = m.series.filter(function (p) { return day(p.d) >= start; });
     var W = Math.max(300, box.clientWidth), H = Math.round(Math.max(230, Math.min(330, W * 0.4)));
