@@ -1,0 +1,68 @@
+# FINAL basket v1 (DE), frozen 2026-11-21. Source: Ahrefs Keywords Explorer (DE), 12-month average volume.
+# Rules: commercial gambling SERPs that affiliates and operators compete for; one keyword per near-duplicate
+# cluster; excluded: rules/how-to, tools and calculators, merchandise, films, news and regulation stories,
+# random-wheel "roleta/ruleta" queries, brand and navigational terms. A few offshore/unlicensed terms are kept
+# on purpose: that is where parasite pages and SERP poisoning concentrate.
+# Changing this list breaks comparability. Make a v2 file and annotate the switch date instead of editing.
+
+# casino
+online casino
+casino
+bestes online casino
+online casino echtgeld
+online casino deutschland
+beste online casino
+beste online casino deutschland
+seriöses online casino deutschland
+deutsche online casino
+online spielothek
+echtgeld casino
+las vegas casino online
+live casino online
+casino spiele
+
+# slots
+slots
+online slots
+spielautomaten
+free slots
+
+# bonus
+casino bonus ohne einzahlung
+casino bonus
+online casino bonus ohne einzahlung
+bonus ohne einzahlung
+freispiele ohne einzahlung
+casino ohne einzahlung
+online casino bonus
+50 freispiele ohne einzahlung
+freispiele ohne einzahlung neu
+neue casino bonus ohne einzahlung
+
+# sportwetten
+sportwetten
+wettanbieter
+beste wettanbieter
+neue wettanbieter
+sportwetten anbieter
+sportwetten online
+wettanbieter deutschland
+online wetten
+fußball wetten
+sportwetten bonus ohne einzahlung
+wett tipps heute
+sportwetten tipps
+
+# spiele
+online blackjack
+online poker
+online roulette
+
+# offshore und ohne lizenz
+online casino ohne oasis
+online casino ohne verifizierung
+wettanbieter ohne lugas
+casino ohne lugas
+online casino ohne limit
+crypto casino
+casino ohne lizenz

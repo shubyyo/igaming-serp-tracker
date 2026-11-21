@@ -1,0 +1,70 @@
+# FINAL basket v1 (CA), frozen 2026-11-21. Source: Ahrefs Keywords Explorer (CA), 12-month average volume.
+# Rules: commercial gambling SERPs that affiliates and operators compete for; one keyword per near-duplicate
+# cluster; excluded: rules/how-to, tools and calculators, merchandise, films, news and regulation stories,
+# random-wheel "roleta/ruleta" queries, brand and navigational terms. A few offshore/unlicensed terms are kept
+# on purpose: that is where parasite pages and SERP poisoning concentrate.
+# Changing this list breaks comparability. Make a v2 file and annotate the switch date instead of editing.
+
+# casino
+online casino
+casino
+best online casino
+online casino canada
+best online casino canada
+online casino ontario
+best online casino ontario
+canadian online casino
+real money online casino canada
+alberta online casino
+new online casinos
+new online casinos canada
+top online casinos
+mobile casino
+casino apps
+live casino
+live dealer casino
+online casino reviews
+
+# payouts and deposits
+instant withdrawal casino
+fast payout casino
+fastest payout online casino canada
+1$ deposit casino
+
+# slots
+slots
+free slots
+online slots
+online slots canada
+best online slots canada
+
+# bonuses
+no deposit bonus casino
+no deposit bonus
+free spins no deposit
+free spins no deposit canada
+no deposit bonus casino canada
+casino bonus
+online casino bonus
+no deposit bonus codes
+
+# betting
+sports betting
+sports betting canada
+sports betting ontario
+betting sites
+betting sites canada
+online sports betting
+best sports betting
+betting apps
+sportsbook
+
+# games
+online poker
+online roulette
+online blackjack
+live roulette
+
+# crypto
+crypto casino
+crypto casino canada

@@ -1,0 +1,70 @@
+# FINAL basket v1 (IT), frozen 2026-11-21. Source: Ahrefs Keywords Explorer (IT), 12-month average volume.
+# Rules: commercial gambling SERPs that affiliates and operators compete for; one keyword per near-duplicate
+# cluster; excluded: rules/how-to, tools and calculators, merchandise, films, news and regulation stories,
+# random-wheel "roleta/ruleta" queries, brand and navigational terms. A few offshore/unlicensed terms are kept
+# on purpose: that is where parasite pages and SERP poisoning concentrate.
+# Changing this list breaks comparability. Make a v2 file and annotate the switch date instead of editing.
+
+# casino
+casino online
+casino
+migliori casino online
+casino online italia
+siti casino online
+nuovi casino
+casino live
+
+# slot
+slot online
+slot
+slot machine
+slot online soldi veri
+migliori slot online
+siti slot
+slot gratis
+
+# bonus
+bonus senza deposito
+bonus senza deposito casino
+bonus casino senza deposito
+bonus casino
+bonus benvenuto senza deposito
+slot bonus senza deposito
+50 euro bonus senza deposito
+bonus 100 euro senza deposito
+casino con bonus senza deposito
+
+# scommesse
+scommesse sportive
+siti scommesse
+scommesse
+scommesse online
+scommesse calcio
+migliori siti scommesse
+siti scommesse italiani
+nuovi siti scommesse
+app scommesse
+bonus scommesse
+bonus benvenuto scommesse
+scommesse sportive online
+scommesse tennis
+
+# pronostici
+pronostici calcio
+pronostici calcio oggi
+pronostici oggi
+pronostici vincenti
+pronostici tennis
+
+# giochi
+poker online
+blackjack online
+roulette online
+
+# non aams e offshore
+casino italiani non aams
+migliori casino non aams
+migliori siti scommesse non aams
+casino online stranieri
+crypto casino
+casino senza documenti

@@ -1,0 +1,68 @@
+# FINAL basket v1 (BR), frozen 2026-11-21. Source: Ahrefs Keywords Explorer (BR), 12-month average volume.
+# Rules: commercial gambling SERPs that affiliates and operators compete for; one keyword per near-duplicate
+# cluster; excluded: rules/how-to, tools and calculators, merchandise, films, news and regulation stories,
+# random-wheel "roleta/ruleta" queries, brand and navigational terms. A few offshore/unlicensed terms are kept
+# on purpose: that is where parasite pages and SERP poisoning concentrate.
+# Changing this list breaks comparability. Make a v2 file and annotate the switch date instead of editing.
+
+# cassino
+cassino online
+cassino
+jogos de cassino
+jogos de cassino online
+cassino online brasil
+cassino ao vivo
+plataforma cassino
+melhores plataformas de cassino online
+roleta online
+
+# slots
+slots
+slots demo
+777 slots
+slots online
+
+# bonus
+bônus de cadastro
+plataforma com bônus de cadastro
+bônus de cadastro grátis
+bônus de 20 no cadastro
+plataforma que dá bônus
+casa de apostas com bonus
+bet bônus grátis
+100 rodadas grátis sem depósito
+rodadas grátis
+bet giros grátis
+
+# apostas
+casas de apostas
+casa de apostas
+melhores casas de apostas
+site de apostas
+sites de apostas
+melhor site de apostas
+apostas esportivas
+aposta esportiva
+apostas online
+casas de apostas esportivas
+50 melhores casas de apostas
+plataforma de apostas
+bolsa de apostas exchange
+bet esportiva
+
+# plataformas bet
+plataforma bet
+plataformas bet
+todas plataformas bet
+plataformas bet novas
+melhores bets
+bets autorizadas
+bets legalizadas
+bet de 1 real
+plataforma bet que mais paga
+
+# palpites
+palpites de futebol
+palpites jogos de hoje
+palpites de hoje
+palpites do dia

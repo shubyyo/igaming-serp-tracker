@@ -1,0 +1,70 @@
+# FINAL basket v1 (ES), frozen 2026-11-21. Source: Ahrefs Keywords Explorer (ES), 12-month average volume.
+# Rules: commercial gambling SERPs that affiliates and operators compete for; one keyword per near-duplicate
+# cluster; excluded: rules/how-to, tools and calculators, merchandise, films, news and regulation stories,
+# random-wheel "roleta/ruleta" queries, brand and navigational terms. A few offshore/unlicensed terms are kept
+# on purpose: that is where parasite pages and SERP poisoning concentrate.
+# Changing this list breaks comparability. Make a v2 file and annotate the switch date instead of editing.
+
+# casino
+casino online
+casinos online
+casino
+casino online españa
+casinos online españa
+mejores casinos online
+mejores casinos online españa
+mejor casino online
+casinos online nuevos
+nuevos casinos online
+casinos online fiables en españa
+casino online españa dinero real
+casino en vivo
+live casino
+casino online bono bienvenida
+
+# slots
+slots
+slots online
+slots online españa
+tragaperras
+tragaperras online
+tragaperras online con dinero real
+slots gratis
+
+# bonos
+bono sin deposito casino
+casino bono sin deposito
+bonos casino sin deposito
+bono sin deposito casino españa
+tiradas gratis casino
+25 giros gratis sin depósito
+50 giros gratis sin depósito
+bono casino
+
+# apuestas
+apuestas deportivas
+casas de apuestas
+apuestas
+casas de apuestas españa
+mejores casas de apuestas
+casas de apuestas online
+apuestas online
+apuestas deportivas online
+apuestas deportivas españa
+apuestas de futbol
+apuestas tenis
+
+# pronosticos
+pronosticos deportivos
+pronosticos futbol
+pronosticos futbol hoy
+
+# juegos
+poker online
+bingo online
+
+# offshore y sin licencia
+casino sin licencia
+casinos online sin verificación
+casino fuera de españa
+crypto casino

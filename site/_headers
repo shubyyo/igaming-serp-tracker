@@ -1,0 +1,14 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/igaming-serp-volatility/badge/*
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+
+/igaming-serp-volatility/data/*
+  Cache-Control: public, max-age=600
+  Access-Control-Allow-Origin: *
+
+/igaming-serp-volatility/assets/*
+  Cache-Control: public, max-age=86400

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iGaming SERP Volatility Index · SEO Tipsy Tools</title>
+<meta name="description" content="Daily Google mobile top-10 volatility for 400 casino and sports betting keywords across eight markets, with suspected poisoned results re-checked. Free embeddable badge and open data.">
+<link rel="canonical" href="https://tools.seotipsy.com/igaming-serp-volatility/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="iGaming SERP Volatility Index">
+<meta property="og:description" content="How rough are gambling SERPs today? A daily index across eight markets.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tools.seotipsy.com/igaming-serp-volatility/">
+<meta name="theme-color" content="#0f2a24">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"iGaming SERP Volatility Index",
+ "description":"Daily volatility of Google mobile top-10 organic results for a fixed basket of gambling keywords per market, after re-checking suspected poisoned SERPs.",
+ "url":"https://tools.seotipsy.com/igaming-serp-volatility/","license":"https://creativecommons.org/licenses/by/4.0/",
+ "creator":{"@type":"Person","name":"Ivan Stamenković","url":"https://seotipsy.com/about/"},
+ "isAccessibleForFree":true,
+ "distribution":[{"@type":"DataDownload","encodingFormat":"text/csv","contentUrl":"https://tools.seotipsy.com/igaming-serp-volatility/data/index.csv"},
+                 {"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://tools.seotipsy.com/igaming-serp-volatility/data/summary.json"}]}
+</script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="../">seo tipsy <span class="brand__dot">·</span> <span class="brand__tag">TOOLS</span></a>
+    <nav class="top__nav" aria-label="Main">
+      <a href="methodology/">Methodology</a>
+      <a href="data/index.csv">Data</a>
+      <a href="#embed">Embed</a>
+      <a href="https://seotipsy.com/">seotipsy.com</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero__in">
+    <div class="hero__text">
+      <p class="label" id="bulletin">Daily bulletin</p>
+      <h1>How rough are gambling SERPs today?</h1>
+      <p class="lede">The iGaming SERP Volatility Index measures how much Google's mobile top 10 moved for 400 casino and betting keywords across eight markets. Fetches that look poisoned are re-checked before they count.</p>
+    </div>
+    <div class="reading" aria-live="polite">
+      <div class="reading__num"><b id="hero-num">–</b><span>/ 10</span></div>
+      <div class="reading__row"><span class="chip" id="hero-band">loading</span><span id="hero-meta"></span></div>
+      <div class="reading__stats">
+        <div><p class="label">7-day avg</p><div id="stat-avg">–</div></div>
+        <div><p class="label">30-day high</p><div id="stat-high">–</div></div>
+        <div><p class="label">Hottest</p><div id="stat-hot">–</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <section class="panel panel--lift" aria-labelledby="chart-title">
+    <div class="panel__head">
+      <h2 id="chart-title">All markets, last 90 days</h2>
+      <div class="seg" role="tablist" aria-label="Time range">
+        <button role="tab" data-range="30">30d</button>
+        <button role="tab" data-range="90" aria-selected="true">90d</button>
+        <button role="tab" data-range="365">1y</button>
+      </div>
+    </div>
+    <div class="chips" id="series-chips" role="tablist" aria-label="Market"></div>
+    <div class="chart" id="chart"></div>
+    <ol class="notes" id="notes" hidden></ol>
+    <p class="legend" id="legend"></p>
+  </section>
+
+  <section class="section" aria-labelledby="markets-title">
+    <div class="section-head">
+      <h2 id="markets-title">Markets</h2>
+      <p>Each market is scored against its own last 90 days.</p>
+    </div>
+    <div class="grid" id="market-grid"></div>
+  </section>
+
+  <section class="section row">
+    <div class="panel wide">
+      <h2 class="h3">Biggest movers today</h2>
+      <p class="muted small" style="margin:0 0 12px">Keyword volatility, 0–100. 100 means the whole top 10 was replaced.</p>
+      <table class="movers">
+        <thead><tr><th scope="col">Keyword</th><th scope="col">Market</th><th scope="col" class="num">Moved</th></tr></thead>
+        <tbody id="movers"></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <h2 class="h3">Data quality <span class="muted small" id="quality-for"></span></h2>
+      <p class="muted small" style="margin:0 0 12px">What happened to the latest day's fetches.</p>
+      <ul class="quality" id="quality"></ul>
+      <p class="caveat">Poisoning is <em>suspected</em> from how a SERP compares with its own recent history. It is an inference, not a statement about Google.</p>
+    </div>
+  </section>
+
+  <section class="section row" id="embed">
+    <div class="embed wide">
+      <h2>Put today's reading on your site</h2>
+      <p>Free with the link intact. The badge refreshes daily.</p>
+      <div class="embed__preview" id="embed-preview"></div>
+      <label class="label" for="embed-code">Embed code</label>
+      <textarea id="embed-code" readonly rows="3" spellcheck="false"></textarea>
+      <button class="btn-lime" id="copy-embed" type="button">Copy code</button>
+      <label class="label" for="cite">Citation</label>
+      <textarea id="cite" readonly rows="2" spellcheck="false"></textarea>
+      <button class="btn-lime" id="copy-cite" type="button">Copy citation</button>
+    </div>
+    <div class="panel how">
+      <h2 class="h3">How it works</h2>
+      <ol>
+        <li><span>1</span><div><strong>Fetch.</strong> 50 frozen keywords per market, Google mobile top 10, every morning.</div></li>
+        <li><span>2</span><div><strong>Guard.</strong> A result that doesn't look like its own last week is re-fetched; agreeing oddities wait a day for confirmation.</div></li>
+        <li><span>3</span><div><strong>Score.</strong> Rank changes weighted toward the top, trimmed mean per market, scaled against that market's 90-day history.</div></li>
+      </ol>
+      <a class="more" href="methodology/">Read the full methodology →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot__in" style="max-width:1200px;margin:0 auto">
+    <span>Built by <a href="https://seotipsy.com/about/">Ivan Stamenković</a> at <a href="https://seotipsy.com/">SEO Tipsy</a>. Data under CC BY 4.0 · <a href="data/index.csv">CSV</a> · <a href="data/summary.json">JSON</a></span>
+    <span class="mono small muted" id="generated"></span>
+  </div>
+</footer>
+<script src="assets/app.js" defer></script>
+</body>
+</html>

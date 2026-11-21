@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology · iGaming SERP Volatility Index</title>
+<meta name="description" content="How the iGaming SERP Volatility Index is calculated: the keyword baskets, the rank-change score, the per-market reference, and how suspected poisoned SERPs are re-checked.">
+<link rel="canonical" href="https://tools.seotipsy.com/igaming-serp-volatility/methodology/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="How the iGaming SERP Volatility Index works">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tools.seotipsy.com/igaming-serp-volatility/methodology/">
+<meta name="theme-color" content="#0f2a24">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"How the iGaming SERP Volatility Index works",
+ "url":"https://tools.seotipsy.com/igaming-serp-volatility/methodology/",
+ "author":{"@type":"Person","name":"Ivan Stamenković","url":"https://seotipsy.com/about/"},
+ "publisher":{"@type":"Organization","name":"SEO Tipsy","url":"https://seotipsy.com/"},
+ "about":{"@type":"Dataset","name":"iGaming SERP Volatility Index","url":"https://tools.seotipsy.com/igaming-serp-volatility/"}}
+</script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="../../">seo tipsy <span class="brand__dot">·</span> <span class="brand__tag">TOOLS</span></a>
+    <nav class="top__nav" aria-label="Main">
+      <a href="../">The index</a>
+      <a href="../data/index.csv">Data</a>
+      <a href="../#embed">Embed</a>
+      <a href="https://seotipsy.com/">seotipsy.com</a>
+    </nav>
+  </div>
+</header>
+<section class="hero page-hero" style="padding-bottom:48px">
+  <div class="wrap">
+    <p class="label">iGaming SERP Volatility Index · Methodology</p>
+    <h1>How the index works</h1>
+    <p class="lede" style="margin-top:14px">Every step from a Google results page to the number on the badge, including what the index can't tell you.</p>
+  </div>
+</section>
+
+<article class="prose">
+  <p>Gambling keywords are some of the most contested results in search. Casino and sportsbook SERPs churn faster than most verticals, and they're a favorite target for parasite pages and spam. General volatility trackers mix them in with recipes and software reviews. This index looks only at gambling SERPs, one market at a time, and makes every step of the calculation public.</p>
+
+  <h2 id="measured">What is measured</h2>
+  <p>Each market has a fixed basket of 50 casino, betting and bonus keywords. Every keyword is fetched once each morning (UTC) from Google's mobile results in that market's main language. We keep the top 10 organic results. Ads, maps and other SERP features don't count.</p>
+  <table>
+    <thead><tr><th scope="col">Market</th><th scope="col">Google location</th><th scope="col">Language</th></tr></thead>
+    <tbody>
+      <tr><td>United Kingdom, United States, Canada</td><td>country level</td><td>English</td></tr>
+      <tr><td>Brazil</td><td>country level</td><td>Portuguese</td></tr>
+      <tr><td>Mexico, Spain</td><td>country level</td><td>Spanish</td></tr>
+      <tr><td>Germany</td><td>country level</td><td>German</td></tr>
+      <tr><td>Italy</td><td>country level</td><td>Italian</td></tr>
+    </tbody>
+  </table>
+  <p>Baskets were built from Ahrefs keyword data: commercial searches that affiliates and operators compete for, with one keyword per group of near-duplicates. Rules and how-to searches, calculators, brand names and news queries are left out. A few offshore and unlicensed terms are kept on purpose, because that is where parasite pages concentrate.</p>
+  <p>The baskets are frozen. If a keyword ever has to change, the change is versioned and noted on the chart, because a different basket isn't comparable.</p>
+
+  <h2 id="score">From two SERPs to one number</h2>
+  <p>Each result is identified by its site: the host name, lowercased, without <code>www</code>. Google now hides many destination URLs behind its own redirect links, so the host is the part every data provider reports reliably. If one site holds two positions, the second is counted separately (<code>site.com#2</code>), so all ten positions keep their own identity. Then we compare today's list with the last verified list for the same keyword.</p>
+  <p>This means a site swapping one of its pages for another doesn't register as movement; a new site entering the top 10, or sites changing places, does.</p>
+  <p>Each site that moved contributes its rank change, weighted by where it sits:</p>
+<pre>weight(r) = 1 / log2(1 + r)        r = the better of the two ranks
+D         = Σ weight(r) × |rank_today − rank_before|    (absent = position 11)
+v         = D / Dmax               Dmax = the value for a completely replaced top 10</pre>
+  <p>A swap at positions 1–2 counts far more than a swap at 9–10, which matches how traffic is split. <code>v</code> runs from 0 (identical) to 1 (every site replaced).</p>
+  <p>A market's daily value <code>V</code> is the 5% trimmed mean of <code>v</code> across its basket, scaled to 0–100. Trimming stops one exploding keyword from moving the whole market.</p>
+  <p>The <strong>score</strong> you see is <code>V</code> relative to that market's own recent history: <code>10 × V / max(P99, 3 × P50)</code>, capped at 10. P50 and P99 are percentiles of the previous 90 clean days, frozen for the calendar month. The <code>3 × P50</code> floor keeps an ordinary day around 3 even when the last 90 days happened to be quiet. The bands use the same frozen percentiles:</p>
+  <table>
+    <thead><tr><th scope="col">Band</th><th scope="col">V is…</th></tr></thead>
+    <tbody>
+      <tr><td>Calm</td><td>below the market's median (P50)</td></tr>
+      <tr><td>Normal</td><td>between P50 and P80</td></tr>
+      <tr><td>Elevated</td><td>between P80 and P95</td></tr>
+      <tr><td>Storm</td><td>P95 or above</td></tr>
+    </tbody>
+  </table>
+  <p>Each market is scored against itself, so a 7 in Brazil and a 7 in Germany both mean "unusually busy for that market". They don't mean the same number of URLs moved. The all-markets index is the equal-weighted mean of the market values, with its own reference. Until a series has 30 clean days, a provisional reference is used and the chart says so.</p>
+
+  <h2 id="poisoning">Suspected poisoned SERPs</h2>
+  <p>Sometimes a fetch returns a page that doesn't look like the keyword's normal results: a burst of forum threads, a set of unfamiliar domains, or an almost empty page after legal removals. Counting those as volatility would turn a data problem into a fake "storm". Each fetch therefore goes through three stages.</p>
+  <ol>
+    <li><strong>Provider check.</strong> When the data comes from DataForSEO, its <code>resolve_poisoned_results</code> option is on, and any result it repaired is marked in our data. SerpApi has no equivalent, so only the next two stages apply to its data.</li>
+    <li><strong>History check.</strong> We build a reference set from the domains that appeared on at least 3 of the keyword's last 7 verified days. A fetch is <em>suspected</em> when it shares less than half of that set, or when it shows 3 or more Reddit, Quora or social results for a keyword that normally shows at most 1. One exception: a fetch that closely matches the previous verified day (Jaccard ≥ 0.7) is never suspected, because it's a continuation, not a jump.</li>
+    <li><strong>Re-fetch.</strong> Each suspected keyword is fetched again about 90 minutes later.
+      <ul>
+        <li>If the second fetch looks normal, it's used (<em>recovered</em>).</li>
+        <li>If both fetches look unusual but agree with each other, the result is <em>quarantined</em>. It's shown as provisional (a hollow dot on the chart) and checked against the next day. A next day that matches confirms it as a real shift; otherwise it's discarded.</li>
+        <li>If both look unusual and disagree, the keyword is <em>discarded</em> for that day.</li>
+      </ul>
+    </li>
+  </ol>
+  <p>A day stays in the index if at least 80% of its basket is usable once this has settled. Otherwise it's drawn as a gap. Each market's data-quality table shows how many keywords took each path.</p>
+  <p>These checks infer poisoning from how a result compares with its own history. They don't prove anything about why Google showed it, and nothing here should be read as a statement about Google policy.</p>
+
+  <h2 id="providers">Data providers</h2>
+  <p>Results come from a commercial SERP API (SerpApi at launch, DataForSEO later). Every stored result records its provider. On the day the provider changes, keywords are re-baselined rather than scored, so the switch can't show up as volatility, and the chart marks that day.</p>
+
+  <h2 id="limits">Known limits</h2>
+  <ul>
+    <li>One fetch a day from one data center's view of one location. Personalization, local packs and intraday swings aren't captured.</li>
+    <li>Mobile only.</li>
+    <li>There's a warm-up: a keyword's first three days can't be checked against history. The index was published only after a 30-day baseline.</li>
+    <li>Rankings in regulated markets can move for licensing reasons (an operator blocked, a domain change) that have nothing to do with algorithm updates.</li>
+    <li>External events, such as Google updates as reported by industry press, are annotated for context. They aren't inferred from the data.</li>
+  </ul>
+
+  <h2 id="data">Use the data</h2>
+  <p>The daily series is free to reuse under CC BY 4.0 with a link back: <a href="../data/index.csv">CSV</a> · <a href="../data/summary.json">JSON</a>. The embeddable badge updates daily; copy its code from <a href="../#embed">the index page</a>.</p>
+  <p>Suggested citation: <em>iGaming SERP Volatility Index, SEO Tipsy, [date]. https://tools.seotipsy.com/igaming-serp-volatility/</em></p>
+</article>
+
+<footer class="foot">
+  <div class="foot__in" style="max-width:1200px;margin:0 auto">
+    <span>Built by <a href="https://seotipsy.com/about/">Ivan Stamenković</a> at <a href="https://seotipsy.com/">SEO Tipsy</a>. Data under CC BY 4.0.</span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+ "title": "iGaming SERP Volatility Index",
+ "provider": "serpapi",
+ "tool_path": "igaming-serp-volatility",
+ "site_url": "https://tools.seotipsy.com/igaming-serp-volatility/",
+ "methodology_url": "https://tools.seotipsy.com/igaming-serp-volatility/methodology/",
+ "embed_link_url": "https://tools.seotipsy.com/igaming-serp-volatility/",
+ "badge_label": "iGaming SERP",
+
+ "depth": 10,
+ "device": "mobile",
+ "resolve_poisoned_results": true,
+ "price_per_task_usd": 0.0006,
+ "serpapi_workers": 6,
+ "collect_wait_minutes": 20,
+
+ "trim": 0.05,
+ "lookback_days": 7,
+ "min_scored_keywords": 10,
+ "min_valid_share": 0.8,
+ "global_min_markets": 4,
+
+ "reference_window_days": 90,
+ "reference_min_days": 30,
+ "scale_floor_ratio": 3.0,
+ "bootstrap_reference": {"p50": 4.0, "p80": 7.0, "p95": 11.0, "p99": 15.0},
+ "publish_days": 365
+}

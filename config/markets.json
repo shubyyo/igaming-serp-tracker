@@ -1,0 +1,14 @@
+{
+ "_note": "location_code/language_code are DataForSEO (Google Ads geo IDs); google_domain/gl/hl are SerpApi. Both target country level, mobile.",
+ "markets": [
+  {"code": "uk", "name": "United Kingdom", "location_code": 2826, "language_code": "en", "google_domain": "google.co.uk",  "gl": "uk", "hl": "en", "enabled": true},
+  {"code": "us", "name": "United States",  "location_code": 2840, "language_code": "en", "google_domain": "google.com",    "gl": "us", "hl": "en", "enabled": true},
+  {"code": "ca", "name": "Canada",         "location_code": 2124, "language_code": "en", "google_domain": "google.ca",     "gl": "ca", "hl": "en", "enabled": true},
+  {"code": "br", "name": "Brazil",         "location_code": 2076, "language_code": "pt", "google_domain": "google.com.br", "gl": "br", "hl": "pt", "enabled": true},
+  {"code": "mx", "name": "Mexico",         "location_code": 2484, "language_code": "es", "google_domain": "google.com.mx", "gl": "mx", "hl": "es", "enabled": true},
+  {"code": "es", "name": "Spain",          "location_code": 2724, "language_code": "es", "google_domain": "google.es",     "gl": "es", "hl": "es", "enabled": true},
+  {"code": "de", "name": "Germany",        "location_code": 2276, "language_code": "de", "google_domain": "google.de",     "gl": "de", "hl": "de", "enabled": true},
+  {"code": "it", "name": "Italy",          "location_code": 2380, "language_code": "it", "google_domain": "google.it",     "gl": "it", "hl": "it", "enabled": true},
+  {"code": "tr", "name": "Turkey",         "location_code": 2792, "language_code": "tr", "google_domain": "google.com.tr", "gl": "tr", "hl": "tr", "enabled": false}
+ ]
+}

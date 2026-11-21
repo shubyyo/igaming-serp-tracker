@@ -1,0 +1,68 @@
+# FINAL basket v1 (UK), frozen 2026-11-21. Source: Ahrefs Keywords Explorer (GB), 12-month average volume.
+# Rules: commercial gambling SERPs that affiliates and operators compete for; one keyword per near-duplicate
+# cluster; excluded: rules/how-to, tools and calculators, merchandise, films, news and regulation stories,
+# random-wheel "roleta/ruleta" queries, brand and navigational terms. A few offshore/unlicensed terms are kept
+# on purpose: that is where parasite pages and SERP poisoning concentrate.
+# Changing this list breaks comparability. Make a v2 file and annotate the switch date instead of editing.
+
+# casino
+online casino
+casino
+casino sites
+best online casino
+online casinos
+uk casino sites
+best online casino uk
+new online casinos
+new casino sites
+top 20 online casinos uk
+live casino
+casino welcome bonus
+fast withdrawal casinos
+pay by mobile casino
+
+# slots
+slots
+online slots
+slot sites
+free slots
+demo slots
+best online slots uk
+top 20 slots uk
+
+# bonuses
+free spins no deposit
+free spins no deposit uk
+free spins
+no deposit bonus
+free spins no wagering
+
+# betting
+betting sites
+betting sites uk
+new betting sites
+best betting sites
+top 20 betting sites uk
+betting apps
+free bets
+betting offers
+betting sign up offers
+sports betting
+matched betting
+football betting tips
+football betting sites
+horse racing betting
+cricket betting
+
+# games
+online bingo
+bingo sites
+online poker
+live roulette online
+blackjack online
+
+# offshore and unlicensed
+non gamstop casinos
+non gamstop betting sites
+crypto casino
+no kyc casinos

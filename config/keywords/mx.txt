@@ -1,0 +1,68 @@
+# FINAL basket v1 (MX), frozen 2026-11-21. Source: Ahrefs Keywords Explorer (MX), 12-month average volume.
+# Rules: commercial gambling SERPs that affiliates and operators compete for; one keyword per near-duplicate
+# cluster; excluded: rules/how-to, tools and calculators, merchandise, films, news and regulation stories,
+# random-wheel "roleta/ruleta" queries, brand and navigational terms. A few offshore/unlicensed terms are kept
+# on purpose: that is where parasite pages and SERP poisoning concentrate.
+# Changing this list breaks comparability. Make a v2 file and annotate the switch date instead of editing.
+
+# casino
+casino online
+casino
+casino en linea
+casinos en linea
+online casino
+casino en linea mexico
+casino online mexico
+casinos en linea mexico
+mejor casino online
+mejor casino en linea
+top 10 online casino
+best casino online
+casinos en linea confiables
+casino en vivo
+juegos de casino en línea
+juegos de casino online
+juegos de casino dinero real
+
+# slots
+slots
+tragamonedas
+máquinas tragamonedas
+777 slots
+slots casino
+
+# bonos
+casino bono sin deposito
+casinos con bono sin deposito
+bono sin deposito
+casino con bono de bienvenida
+casinos con bono de bienvenida
+50 giros gratis sin depósito
+25 giros gratis sin depósito
+100 giros gratis sin depósito
+giros gratis sin depósito
+casino bono por registro
+casino bono sin depósito retirable
+
+# apuestas
+apuestas deportivas
+casas de apuestas
+apuestas
+apuestas online
+casas de apuestas mexico
+mejores casas de apuestas
+casas de apuestas deportivas
+apuestas deportivas mexico
+apuestas futbol
+app de apuestas deportivas
+apuestas en linea
+mejores casas de apuestas mexico
+casas de apuestas online
+momios
+
+# pronosticos
+pronosticos deportivos
+pronosticos futbol
+
+# juegos
+poker online

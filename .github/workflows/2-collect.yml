@@ -1,0 +1,34 @@
+name: Collect and re-fetch suspects
+on:
+  schedule:
+    - cron: "30 7 * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: tracker
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Collect first fetches, queue re-fetches
+        env:
+          DATAFORSEO_LOGIN: ${{ secrets.DATAFORSEO_LOGIN }}
+          DATAFORSEO_PASSWORD: ${{ secrets.DATAFORSEO_PASSWORD }}
+          DATAFORSEO_BASE: ${{ vars.DATAFORSEO_BASE }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          TRACKER_PROVIDER: ${{ vars.TRACKER_PROVIDER }}
+        run: python -m tracker collect
+      - name: Commit data
+        run: |
+          git config user.name "serp-tracker-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data site
+          git diff --cached --quiet || git commit -m "data: collect $(date -u +%F)"
+          git push
