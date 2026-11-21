@@ -82,6 +82,10 @@ GitHub Actions minutes are free on a public repo. A private repo gets 2,000 minu
 * **References** are P50/P80/P95/P99 of the trailing 90 non-degraded, non-provisional days before each month starts, frozen in `data/state/references.json`. A month with fewer than 30 such days uses the bootstrap reference.
 * **Warm-up.** For a keyword's first 3 verified days there's no history to compare against, so nothing is flagged. The 30-day baseline covers this.
 
+## Changing CSS or JS
+
+Cloudflare caches `.css` and `.js` at its edge. When you change `site/igaming-serp-volatility/assets/*`, bump the `?v=` number on every `<link>`/`<script>` that loads them (index, methodology, tools index, 404), or visitors keep the old file.
+
 ## Caveats to keep in public copy
 
 * Always describe detections as "suspected" poisoning. The guard infers it from how a SERP compares with its own history.

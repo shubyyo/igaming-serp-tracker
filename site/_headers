@@ -11,7 +11,7 @@
   Access-Control-Allow-Origin: *
 
 /igaming-serp-volatility/assets/*
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=3600
 
 https://:project.pages.dev/*
   X-Robots-Tag: noindex
