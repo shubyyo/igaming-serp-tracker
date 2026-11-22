@@ -3,10 +3,20 @@
 A first fetch is SUSPECT when it does not look like this keyword's recent verified
 history, unless it simply continues the last verified day:
 
-  reference R   = domains present in >= 3 of the last 7 verified days
-  overlap       = |domains(today) & R| / |R|
-  suspect if      (overlap < 0.5  OR  >= 3 social/forum results while the baseline has <= 1)
+  seen          = hosts present on any of the last 7 verified days, or in any fetch of the
+                  last 7 calendar days (flagged ones included)
+  novelty       = share of today's hosts that are not in `seen`
+  suspect if      (novelty >= 0.7  OR  >= 3 social/forum results while the baseline has <= 1)
             and   NOT continuity (Jaccard(URLs today, URLs last verified day) >= 0.7)
+
+Why novelty and not overlap with a "regulars" set: mobile gambling SERPs churn so much that
+about 40% of ordinary fetches share less than half of the hosts seen on 3+ of the last 7 days,
+so an overlap rule flags normal days. A takeover by hosts never seen in a week is the pattern
+that matters. Measured on a 7-week pre-launch sample (7 markets, ~16k keyword-days), novelty
+>= 0.7 flags about 6% of fetches.
+
+Flagged fetches count as "seen": a takeover that lasts one day is caught, but one still there
+the next day is a real change and is scored, instead of locking the keyword out for good.
 
 Suspect keywords are re-fetched once, at least an hour later:
   second fetch not suspect          -> RECOVERED (second fetch used)
@@ -15,15 +25,13 @@ Suspect keywords are re-fetched once, at least an hour later:
 
 Detections are described as "suspected": the guard infers poisoning, it does not prove it.
 """
-from collections import Counter
 from statistics import median
 
 from .canonical import domain_of, is_social_or_forum
 
 REFERENCE_DAYS = 7
-REFERENCE_MIN_OCCURRENCE = 3
 MIN_HISTORY = 3
-OVERLAP_MIN = 0.5
+NOVELTY_MAX = 0.7
 SOCIAL_SPIKE = 3
 SOCIAL_BASELINE_MAX = 1
 AGREE_JACCARD = 0.7
@@ -46,8 +54,9 @@ def social_count(urls):
     return sum(1 for d in domains(urls) if is_social_or_forum(d))
 
 
-def assess(urls, verified_history):
+def assess(urls, verified_history, recent_fetches=None):
     """Judge one fetch. `verified_history`: URL lists of past verified days, oldest first.
+    `recent_fetches`: URL lists of every fetch of the last 7 days, whatever their status.
 
     Returns (suspect, info) where info explains the decision.
     """
@@ -60,20 +69,19 @@ def assess(urls, verified_history):
         info["reason"] = "not enough history to judge"
         return False, info
 
-    counts = Counter(d for day in hist for d in set(domains(day)))
-    reference = {d for d, c in counts.items() if c >= REFERENCE_MIN_OCCURRENCE}
+    seen = {d for day in hist + list(recent_fetches or []) for d in domains(day)}
     today = set(domains(urls))
-    overlap = len(today & reference) / len(reference) if reference else 1.0
+    novelty = len(today - seen) / len(today)
     social_today = social_count(urls)
     social_base = median(social_count(day) for day in hist)
     continuity = jaccard(urls, hist[-1])
 
     reasons = []
-    if overlap < OVERLAP_MIN:
-        reasons.append("overlap %.2f < %.2f" % (overlap, OVERLAP_MIN))
+    if novelty >= NOVELTY_MAX:
+        reasons.append("%.0f%% of hosts unseen in %d days" % (100 * novelty, len(hist)))
     if social_today >= SOCIAL_SPIKE and social_base <= SOCIAL_BASELINE_MAX:
         reasons.append("%d social/forum results vs baseline %g" % (social_today, social_base))
-    info.update(overlap=round(overlap, 3), social=social_today, continuity=round(continuity, 3))
+    info.update(novelty=round(novelty, 3), social=social_today, continuity=round(continuity, 3))
     if reasons and continuity >= AGREE_JACCARD:
         info["reason"] = "continuity override (%s)" % "; ".join(reasons)
         return False, info
@@ -81,9 +89,12 @@ def assess(urls, verified_history):
     return bool(reasons), info
 
 
-def resolve_refetch(first_urls, second_urls, verified_history):
-    """Status and URLs to keep after a re-fetch of a suspect keyword."""
-    second_suspect, info = assess(second_urls, verified_history)
+def resolve_refetch(first_urls, second_urls, verified_history, recent_fetches=None):
+    """Status and URLs to keep after a re-fetch of a suspect keyword.
+
+    `recent_fetches` must not include today's first fetch, or a repeat of it would pass.
+    """
+    second_suspect, info = assess(second_urls, verified_history, recent_fetches)
     if not first_urls and not second_urls:
         # Two empty pages are a fetch problem, not a SERP shift to confirm tomorrow.
         info["reason"] = "empty on both fetches"

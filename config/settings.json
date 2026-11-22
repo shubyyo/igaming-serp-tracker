@@ -22,7 +22,6 @@
 
  "reference_window_days": 90,
  "reference_min_days": 30,
- "scale_floor_ratio": 3.0,
- "bootstrap_reference": {"p50": 4.0, "p80": 7.0, "p95": 11.0, "p99": 15.0},
+ "bootstrap_reference": {"p50": 50.3, "p80": 55.9, "p95": 58.2, "p99": 63.0},
  "publish_days": 365
 }

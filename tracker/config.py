@@ -28,7 +28,22 @@ def load_settings():
         s = json.load(f)
     # TRACKER_PROVIDER (a GitHub repository variable) switches provider without a commit.
     s["provider"] = (os.environ.get("TRACKER_PROVIDER") or s.get("provider") or "dataforseo").lower()
+    s.setdefault("calibration", load_calibration())
     return s
+
+
+def load_calibration():
+    """Per-series starting references measured on a pre-launch SERP sample (config/calibration.json).
+
+    Used instead of the generic bootstrap until a series has `reference_min_days` of its own history.
+    """
+    path = os.path.join(CONFIG, "calibration.json")
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        cal = json.load(f)
+    return {code: dict(ref, source="calibration", sample=cal.get("sample"))
+            for code, ref in cal.get("series", {}).items()}
 
 
 def tool_dir(site_dir, settings):

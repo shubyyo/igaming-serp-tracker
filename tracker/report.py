@@ -86,9 +86,14 @@ def global_series(market_points, settings):
     return out
 
 
-def reference(points, month, settings, frozen):
-    """P50/P80/P95/P99 for `month` (YYYY-MM): trailing window before the month starts, frozen once made."""
-    if month in frozen:
+def reference(points, month, settings, frozen, code=None):
+    """P50/P80/P95/P99 for `month` (YYYY-MM): trailing window before the month starts, frozen once made.
+
+    Until a series has `reference_min_days` of its own history, it uses its pre-launch calibration
+    (settings["calibration"][code]) or, failing that, the generic bootstrap. Those stand-ins are
+    re-derived on every rebuild rather than frozen, so a corrected calibration takes effect.
+    """
+    if month in frozen and frozen[month].get("source", "").startswith("trailing"):
         return frozen[month]
     start = month + "-01"
     lo = shift(start, -settings.get("reference_window_days", 90))
@@ -97,25 +102,18 @@ def reference(points, month, settings, frozen):
     if len(vals) >= settings.get("reference_min_days", 30):
         ref = {k: round(scoring.percentile(vals, q), 3) for k, q in (("p50", 50), ("p80", 80), ("p95", 95), ("p99", 99))}
         ref.update(n=len(vals), source="trailing %d days" % settings.get("reference_window_days", 90))
+    elif code in (settings.get("calibration") or {}):
+        ref = dict(settings["calibration"][code], n=len(vals))
     else:
         ref = dict(settings["bootstrap_reference"], n=len(vals), source="bootstrap")
     frozen[month] = ref
     return ref
 
 
-def scale_of(ref, settings):
-    """Divisor for the 0-10 score: P99, but never below `scale_floor_ratio` x P50.
-
-    Without the floor, a quiet 90-day window (P99 close to the median) makes ordinary
-    days read 7-8/10. Set scale_floor_ratio to 0 for the plain 10 x V / P99.
-    """
-    return max(ref["p99"], settings.get("scale_floor_ratio", 3.0) * ref["p50"])
-
-
-def score_points(points, settings, frozen):
+def score_points(points, settings, frozen, code=None):
     for p in points:
-        ref = reference(points, p["d"][:7], settings, frozen)
-        p["s"] = scoring.display_score(p["v"], scale_of(ref, settings))
+        ref = reference(points, p["d"][:7], settings, frozen, code)
+        p["s"] = scoring.display_score(p["v"], ref)
         p["b"] = scoring.band(p["v"], ref)
 
 
@@ -152,7 +150,7 @@ def rebuild(store, markets, settings, annotations, site_dir, today=None):
     series = {"global": gpts}
     series.update(pts)
     for code, points in series.items():
-        score_points(points, settings, frozen_all.setdefault(code, {}))
+        score_points(points, settings, frozen_all.setdefault(code, {}), code)
     store.save_state("references", frozen_all)
 
     keep = settings.get("publish_days", 365)
@@ -165,7 +163,7 @@ def rebuild(store, markets, settings, annotations, site_dir, today=None):
             "code": code,
             "name": name,
             "latest": _public(latest) if latest else None,
-            "reference": dict(frozen_all[code][latest["d"][:7]], scale=round(scale_of(frozen_all[code][latest["d"][:7]], settings), 3)) if latest else None,
+            "reference": dict(frozen_all[code][latest["d"][:7]], floor=round(scoring.score_floor(frozen_all[code][latest["d"][:7]]), 3)) if latest else None,
             "series": [_public(p) for p in visible],
         }
         out.update(extra or {})

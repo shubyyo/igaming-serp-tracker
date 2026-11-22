@@ -67,23 +67,24 @@ D         = Σ weight(r) × |rank_today − rank_before|    (absent = position 1
 v         = D / Dmax               Dmax = the value for a completely replaced top 10</pre>
   <p>A swap at positions 1–2 counts far more than a swap at 9–10, which matches how traffic is split. <code>v</code> runs from 0 (identical) to 1 (every site replaced).</p>
   <p>A market's daily value <code>V</code> is the 5% trimmed mean of <code>v</code> across its basket, scaled to 0–100. Trimming stops one exploding keyword from moving the whole market.</p>
-  <p>The <strong>score</strong> you see is <code>V</code> relative to that market's own recent history: <code>10 × V / max(P99, 3 × P50)</code>, capped at 10. P50 and P99 are percentiles of the previous 90 clean days, frozen for the calendar month. The <code>3 × P50</code> floor keeps an ordinary day around 3 even when the last 90 days happened to be quiet. The bands use the same frozen percentiles:</p>
+  <p>The <strong>score</strong> you see places <code>V</code> within that market's own recent history. P50, P80, P95 and P99 are percentiles of the previous 90 clean days, frozen for the calendar month. The score runs in straight lines between fixed points: 5 at P50, 7 at P80, 9 at P95 and 10 at P99 or above. It reaches 0 as far below the median as P99 is above it. A median day therefore scores 5, and the score and the band always agree:</p>
   <table>
     <thead><tr><th scope="col">Band</th><th scope="col">V is…</th></tr></thead>
     <tbody>
-      <tr><td>Calm</td><td>below the market's median (P50)</td></tr>
-      <tr><td>Normal</td><td>between P50 and P80</td></tr>
-      <tr><td>Elevated</td><td>between P80 and P95</td></tr>
-      <tr><td>Storm</td><td>P95 or above</td></tr>
+      <tr><td>Calm</td><td>below the market's median (P50): score under 5</td></tr>
+      <tr><td>Normal</td><td>between P50 and P80: 5 to 7</td></tr>
+      <tr><td>Elevated</td><td>between P80 and P95: 7 to 9</td></tr>
+      <tr><td>Storm</td><td>P95 or above: 9 to 10</td></tr>
     </tbody>
   </table>
-  <p>Each market is scored against itself, so a 7 in Brazil and a 7 in Germany both mean "unusually busy for that market". They don't mean the same number of URLs moved. The all-markets index is the equal-weighted mean of the market values, with its own reference. Until a series has 30 clean days, a provisional reference is used and the chart says so.</p>
+  <p>Each market is scored against itself, so a 7 in Brazil and a 7 in Germany both mean "unusually busy for that market". They don't mean the same number of URLs moved. The all-markets index is the equal-weighted mean of the market values, with its own reference.</p>
+  <p>Until a series has 30 clean days of its own, it is scored against a starting reference. That reference was measured before launch, on about seven weeks of daily mobile SERPs (2 October to 22 November 2026) for a separate sample of casino and betting keywords in each market. It used the same identities, guard and scoring as the live index. Germany and Spain didn't have enough of that sample, so they use the all-markets starting reference instead. Either way the chart says so, and the series switches to its own trailing reference as soon as it has the history.</p>
 
   <h2 id="poisoning">Suspected poisoned SERPs</h2>
   <p>Sometimes a fetch returns a page that doesn't look like the keyword's normal results: a burst of forum threads, a set of unfamiliar domains, or an almost empty page after legal removals. Counting those as volatility would turn a data problem into a fake "storm". Each fetch therefore goes through three stages.</p>
   <ol>
     <li><strong>Provider check.</strong> When the data comes from DataForSEO, its <code>resolve_poisoned_results</code> option is on, and any result it repaired is marked in our data. SerpApi has no equivalent, so only the next two stages apply to its data.</li>
-    <li><strong>History check.</strong> We build a reference set from the domains that appeared on at least 3 of the keyword's last 7 verified days. A fetch is <em>suspected</em> when it shares less than half of that set, or when it shows 3 or more Reddit, Quora or social results for a keyword that normally shows at most 1. One exception: a fetch that closely matches the previous verified day (Jaccard ≥ 0.7) is never suspected, because it's a continuation, not a jump.</li>
+    <li><strong>History check.</strong> We collect every host that appeared for the keyword in the last 7 days, counting the keyword's verified days and any fetch from that week. A fetch is <em>suspected</em> when at least 70% of its hosts are new to that set, or when it shows 3 or more Reddit, Quora or social results for a keyword that normally shows at most 1. One exception: a fetch that closely matches the previous verified day (Jaccard ≥ 0.7) is never suspected, because it's a continuation, not a jump. Mobile gambling SERPs change a lot from day to day, and often switch between a few result sets. Being taken over by sites unseen all week is the pattern this check looks for. On the pre-launch sample it flagged about 6% of fetches.</li>
     <li><strong>Re-fetch.</strong> Each suspected keyword is fetched again about 90 minutes later.
       <ul>
         <li>If the second fetch looks normal, it's used (<em>recovered</em>).</li>

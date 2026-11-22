@@ -58,7 +58,7 @@ To preview locally, run `python -m http.server -d sim/site 8000`.
 2. **GitHub repo.** Push this folder and enable Actions. In Settings, then Actions, then General, set workflow permissions to "Read and write".
 3. **Cloudflare Pages.** Create a project connected to the repo. Leave the build command empty and set the output directory to `site`. Under Custom domains, add `tools.seotipsy.com`. Cloudflare creates the CNAME itself because the zone is already on Cloudflare.
 4. **Keywords.** The v1 baskets (50 per market, built from Ahrefs on 2026-11-21) are frozen in `config/keywords/<market>.txt`. Turn markets on or off in `config/markets.json`.
-5. **Baseline.** Let it run 30 days before publicising. Until then the reference percentiles are the placeholders in `settings.json → bootstrap_reference`, and the page says so.
+5. **Baseline.** Let it run 30 days before publicising. Until then each market is scored against its starting reference in `config/calibration.json` (or the `settings.json → bootstrap_reference` placeholder where there is none), and the page says so.
 
 ## Cost
 
@@ -77,9 +77,11 @@ GitHub Actions minutes are free on a public repo. A private repo gets 2,000 minu
 
 * **Continuity override.** The guard never flags a fetch that matches the last verified day (Jaccard ≥ 0.7). Without this, a real SERP shift is "suspect" on every following day until it enters the 3-of-7 reference set.
 * **Provisional days instead of gaps.** On a real update day, both fetches disagree with history but agree with each other. Those days are quarantined and published as provisional. The next day either confirms them as a `confirmed_shift` or discards them. "Degraded" (fewer than 80% usable keywords) is judged after that resolution, so update days are kept rather than shown as missing data.
-* **Score floor.** The score is `10 × V / max(P99, 3 × P50)`. With the plain `V / P99`, a quiet 90-day window (no update in it) puts ordinary days at 7–8/10, which is exactly the state at launch. Set `scale_floor_ratio` to 0 to switch the floor off.
+* **Score.** The score is piecewise linear through the series' frozen percentiles: P50 → 5, P80 → 7, P95 → 9, P99 → 10, reaching 0 at `max(0, 2 × P50 − P99)`. So the score and the band always agree. Daily `V` sits in a narrow range (P99 is only about 1.3 × P50 on real data), which made the older `10 × V / max(P99, 3 × P50)` read 3–4 every day.
+* **Guard.** A first fetch is suspect when ≥ 70% of its hosts were not seen for that keyword in the last 7 days, counting verified days and every fetch, flagged ones included. Or when it shows a social/forum spike. The earlier rule ("shares < 50% of hosts seen on 3 of the last 7 days") flagged about 40% of ordinary mobile fetches. Counting flagged fetches as seen stops a real change from locking a keyword out.
 * **The global index** is the equal-weighted mean of the market indexes, and needs at least 4 usable markets. It has its own frozen reference.
-* **References** are P50/P80/P95/P99 of the trailing 90 non-degraded, non-provisional days before each month starts, frozen in `data/state/references.json`. A month with fewer than 30 such days uses the bootstrap reference.
+* **References** are P50/P80/P95/P99 of the trailing 90 non-degraded, non-provisional days before each month starts, frozen in `data/state/references.json`. A month with fewer than 30 such days uses the series' starting reference from `config/calibration.json` if it has one, else `bootstrap_reference` (set to the all-markets calibration; DE and ES have no calibration of their own). Those stand-ins are re-derived on every rebuild (not frozen), so a corrected calibration applies immediately.
+* **Calibration.** `config/calibration.json` holds only derived percentiles. They were measured on a pre-launch sample of daily mobile SERPs (2 Oct – 22 Nov 2026) for a separate casino/betting keyword set per market, run through the same identities, guard and scoring as the live index. Flagged fetches were dropped, since the sample has no re-fetch. The raw sample isn't in this repo.
 * **Warm-up.** For a keyword's first 3 verified days there's no history to compare against, so nothing is flagged. The 30-day baseline covers this.
 
 ## Changing CSS or JS

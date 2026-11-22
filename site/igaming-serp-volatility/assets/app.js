@@ -187,8 +187,7 @@
 
     var ref = m.reference;
     if (ref && ref.p99) {
-      var k = ref.scale || ref.p99;
-      var cuts = [0, 10 * ref.p50 / k, 10 * ref.p80 / k, 10 * ref.p95 / k, 10];
+      var cuts = [0, 5, 7, 9, 10];  // the score is anchored on the percentiles, so bands sit at fixed scores
       ['calm', 'normal', 'elevated', 'storm'].forEach(function (b, i) {
         var y0 = y(cuts[i]), y1 = y(Math.min(10, cuts[i + 1]));
         if (y0 - y1 < 0.5) return;
@@ -283,7 +282,11 @@
     hit.addEventListener('pointerleave', function () { tip.hidden = true; cursor.setAttribute('visibility', 'hidden'); });
 
     var lg = 'Score 0–10 against this series’ own history';
-    if (ref) lg += ref.source === 'bootstrap' ? ' (provisional reference until 30 clean days exist)' : ' (' + ref.source + ', frozen for the month)';
+    if (ref) {
+      if (ref.source === 'bootstrap') lg += ' (provisional reference until 30 clean days exist)';
+      else if (ref.source === 'calibration') lg += ' (starting reference from a pre-launch SERP sample until 30 clean days exist)';
+      else lg += ' (' + ref.source + ', frozen for the month)';
+    }
     lg += '. Hollow dots are provisional days; gaps are days with too little clean data.';
     $('#legend').textContent = lg;
   }

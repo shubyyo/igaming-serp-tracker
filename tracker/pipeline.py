@@ -39,6 +39,16 @@ def history(store, d, market, keyword, n=guard.REFERENCE_DAYS):
     return list(reversed(found))
 
 
+def recent_fetches(store, d, market, keyword, days=guard.REFERENCE_DAYS):
+    """Every fetch of the `days` calendar days before `d` (any status), for the guard's seen-set."""
+    out = []
+    for back in range(1, days + 1):
+        e = store.entry(shift(d, -back), market, keyword)
+        if e:
+            out.extend(e[k] for k in ("urls", "first", "second") if e.get(k))
+    return out
+
+
 class _Run:
     """Tracks which day files changed so each is written once."""
 
@@ -92,7 +102,7 @@ def ingest_first(store, d, market, results, source=None):
         if prev and guard.confirm_quarantine(prev["urls"], urls):
             run.set_status(y, market, kw, "confirmed_shift", "next day agreed (%s)" % d)
             prev = None
-        suspect, info = guard.assess(urls, history(store, d, market, kw))
+        suspect, info = guard.assess(urls, history(store, d, market, kw), recent_fetches(store, d, market, kw))
         entry = {"status": "suspect" if suspect else "clean", "urls": urls,
                  "repaired": bool(repaired), "reason": info["reason"], "src": source}
         if suspect:
@@ -126,7 +136,8 @@ def ingest_refetch(store, d, market, results):
         if prev and guard.confirm_quarantine(prev["urls"], second):
             run.set_status(y, market, kw, "confirmed_shift", "next day agreed (%s)" % d)
             prev = None
-        status, keep, info = guard.resolve_refetch(e["first"], second, history(store, d, market, kw))
+        status, keep, info = guard.resolve_refetch(e["first"], second, history(store, d, market, kw),
+                                                    recent_fetches(store, d, market, kw))
         e.update(status=status, urls=keep, second=second, reason=info["reason"],
                  repaired=bool(e.get("repaired") or repaired))
         if prev:

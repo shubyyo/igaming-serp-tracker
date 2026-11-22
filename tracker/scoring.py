@@ -6,7 +6,9 @@ Per keyword-day, on verified top-10 canonical URLs (missing = position 11):
     Dmax  = 2 * sum_{r=1..10} w(r) * (11 - r)      (complete replacement)
     v_k   = min(1, D_k / Dmax)
 Daily index V = 5%-trimmed mean of v_k over valid keywords, scaled 0-100.
-Display score S = 10 * min(1, V / P99), P99 frozen per month.
+Display score S: piecewise linear through the series' own frozen percentiles,
+    lo -> 0, P50 -> 5, P80 -> 7, P95 -> 9, P99 -> 10   (lo = max(0, 2 * P50 - P99)),
+so the score and the band always agree: calm < 5 <= normal < 7 <= elevated < 9 <= storm.
 """
 import math
 
@@ -62,10 +64,25 @@ def percentile(values, p):
     return vals[lo] + (vals[hi] - vals[lo]) * (pos - lo)
 
 
-def display_score(v, p99):
-    if v is None or not p99:
+SCORE_ANCHORS = (("p50", 5.0), ("p80", 7.0), ("p95", 9.0), ("p99", 10.0))
+
+
+def score_floor(ref):
+    """V that scores 0: as far below the median as P99 is above it (never below 0)."""
+    return max(0.0, 2 * ref["p50"] - ref["p99"])
+
+
+def display_score(v, ref):
+    """0-10 score of V against a reference {p50, p80, p95, p99}."""
+    if v is None or not ref or not ref.get("p99"):
         return None
-    return round(10 * min(1.0, v / p99), 1)
+    pts = [(score_floor(ref), 0.0)] + [(ref[k], s) for k, s in SCORE_ANCHORS]
+    if v <= pts[0][0]:
+        return 0.0
+    for (x0, s0), (x1, s1) in zip(pts, pts[1:]):
+        if v < x1:
+            return round(s0 + (s1 - s0) * (v - x0) / (x1 - x0), 1) if x1 > x0 else s0
+    return 10.0
 
 
 def band(v, ref):
