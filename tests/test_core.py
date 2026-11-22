@@ -48,6 +48,15 @@ class Scoring(unittest.TestCase):
         bottom[8], bottom[9] = bottom[9], bottom[8]
         self.assertGreater(scoring.keyword_volatility(a, top), scoring.keyword_volatility(a, bottom))
 
+    def test_consensus(self):
+        a, b = serp("a"), serp("b")
+        # A consensus of one is the plain day-over-day comparison.
+        self.assertEqual(scoring.consensus_volatility([a], b), scoring.keyword_volatility(a, b))
+        self.assertEqual(scoring.consensus_volatility([a, a, a], a), 0.0)
+        # A SERP flipping between two sets reads lower against the consensus than against yesterday.
+        self.assertLess(scoring.consensus_volatility([a, b, a], b), scoring.keyword_volatility(a, b))
+        self.assertEqual(scoring.expected_ranks([a[:2], a[1:3]]), {a[0]: 6.0, a[1]: 1.5, a[2]: 6.5})
+
     def test_trimmed_mean(self):
         vals = [0.1] * 18 + [0.0, 10.0]
         self.assertAlmostEqual(scoring.trimmed_mean(vals, 0.05), 0.1)

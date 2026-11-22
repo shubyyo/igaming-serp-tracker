@@ -1,61 +1,61 @@
 {
  "sample": "pre-launch mobile Google SERP sample, 2026-10-02 to 2026-11-22",
- "method": "Same identities, guard, keyword volatility and 5%-trimmed mean as the live index, on a separate pre-launch keyword sample per market; flagged fetches dropped (no re-fetch).",
+ "method": "Same identities, guard, 3-day consensus keyword volatility and 5%-trimmed mean as the live index, on a separate pre-launch keyword sample per market; flagged fetches dropped (no re-fetch).",
  "series": {
   "uk": {
-   "p50": 49.834,
-   "p80": 57.714,
-   "p95": 60.212,
-   "p99": 68.251,
-   "days": 30,
+   "p50": 43.972,
+   "p80": 47.486,
+   "p95": 51.378,
+   "p99": 52.742,
+   "days": 28,
    "keywords": 22
   },
   "us": {
-   "p50": 51.67,
-   "p80": 58.505,
-   "p95": 66.433,
-   "p99": 70.751,
-   "days": 48,
+   "p50": 42.382,
+   "p80": 47.464,
+   "p95": 53.655,
+   "p99": 60.275,
+   "days": 46,
    "keywords": 52
   },
   "ca": {
-   "p50": 57.288,
-   "p80": 64.371,
-   "p95": 69.075,
-   "p99": 71.515,
-   "days": 30,
+   "p50": 48.928,
+   "p80": 50.719,
+   "p95": 56.565,
+   "p99": 59.597,
+   "days": 28,
    "keywords": 27
   },
   "br": {
-   "p50": 51.826,
-   "p80": 55.944,
-   "p95": 60.377,
-   "p99": 63.722,
-   "days": 51,
+   "p50": 44.617,
+   "p80": 46.57,
+   "p95": 51.434,
+   "p99": 53.583,
+   "days": 49,
    "keywords": 82
   },
   "mx": {
-   "p50": 51.759,
-   "p80": 56.354,
-   "p95": 63.763,
-   "p99": 70.12,
-   "days": 51,
+   "p50": 43.756,
+   "p80": 46.046,
+   "p95": 52.11,
+   "p99": 55.771,
+   "days": 49,
    "keywords": 69
   },
   "it": {
-   "p50": 46.45,
-   "p80": 51.829,
-   "p95": 54.839,
-   "p99": 56.519,
-   "days": 50,
+   "p50": 39.706,
+   "p80": 43.587,
+   "p95": 47.948,
+   "p99": 52.831,
+   "days": 48,
    "keywords": 125
   },
   "global": {
-   "p50": 50.324,
-   "p80": 55.893,
-   "p95": 58.196,
-   "p99": 63.049,
-   "days": 48,
+   "p50": 43.937,
+   "p80": 46.043,
+   "p95": 50.403,
+   "p99": 54.491,
+   "days": 46,
    "markets": 6
   }
  }

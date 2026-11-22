@@ -24,10 +24,12 @@ def _days_between(a, b):
 def market_series(store, code, days, settings):
     """One point per day for a market, plus per-keyword volatility for each day."""
     lookback = settings.get("lookback_days", 7)
+    k = max(1, settings.get("consensus_days", 3))
     min_scored = settings.get("min_scored_keywords", 10)
     min_share = settings.get("min_valid_share", 0.8)
     trim = settings.get("trim", 0.05)
-    last = {}
+    last = {}  # keyword -> recent verified (day, urls, src), oldest first, one provider only
+    seen = Counter()  # keyword -> verified days since the start or the last provider switch
     points = []
     switches = {}
     for d in days:
@@ -42,15 +44,21 @@ def market_series(store, code, days, settings):
             st = e["status"]
             if st not in guard.VERIFIED and st != "quarantined":
                 continue
-            prev = last.get(kw)
+            hist = last.get(kw, [])
             src = e.get("src")
-            if prev and prev[2] and src and prev[2] != src:
+            if hist and hist[-1][2] and src and hist[-1][2] != src:
                 # Different providers see slightly different SERPs: rebase instead of scoring the switch.
                 switches.setdefault(src, d)
-            elif prev and _days_between(prev[0], d) <= lookback:
-                per_kw[kw] = scoring.keyword_volatility(prev[1], e["urls"])
+                hist = []
+                seen[kw] = 0
+            elif seen[kw] >= k and _days_between(hist[-1][0], d) <= lookback:
+                # Warm-up: a keyword is scored once it has k verified days to form a consensus.
+                # Consensus of up to k verified days, none older than lookback + k - 1 days.
+                base = [h[1] for h in hist if _days_between(h[0], d) <= lookback + k - 1]
+                per_kw[kw] = scoring.consensus_volatility(base, e["urls"])
             if st in guard.VERIFIED:
-                last[kw] = (d, e["urls"], src)
+                last[kw] = (hist + [(d, e["urls"], src)])[-k:]
+                seen[kw] += 1
         basket = len(mk)
         usable = sum(counts[s] for s in guard.VERIFIED) + counts["quarantined"]
         v = scoring.daily_index(per_kw.values(), trim) if len(per_kw) >= min_scored else None

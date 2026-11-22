@@ -171,7 +171,7 @@
     box.innerHTML = '';
     if (!m || !scored(m.series).length) {
       var since = (m && m.series.length) ? ' Collection started ' + fmt(m.series[0].d, { year: 'numeric' }) + '.' : '';
-      box.innerHTML = '<p class="muted">Collecting the baseline. Volatility compares two days, so the first reading appears after the second day of data.' + since + '</p>';
+      box.innerHTML = '<p class="muted">Collecting the baseline. Each day is compared with the three days before it, so the first reading appears on the fourth day of data.' + since + '</p>';
       $('#notes').hidden = true;
       $('#legend').textContent = '';
       return;

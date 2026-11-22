@@ -114,7 +114,7 @@ class ProviderSwitch(unittest.TestCase):
             urls = ["https://a%d.com/" % i for i in range(10)]
             moved = urls[1:] + urls[:1]
             d0 = "2026-11-01"
-            for i in range(6):
+            for i in range(8):
                 src = "serpapi" if i < 4 else "dataforseo"
                 res = {"kw%d" % k: (moved if i == 4 else urls, False) for k in range(12)}
                 pipeline.ingest_first(store, shift(d0, i), "uk", res, source=src)
@@ -124,7 +124,9 @@ class ProviderSwitch(unittest.TestCase):
             s = report.rebuild(store, [dict(MARKET)], settings, [], os.path.join(tmp, "site"))
             series = {p["d"]: p for p in s["markets"][0]["series"]}
             self.assertIsNone(series[shift(d0, 4)]["v"])          # switch day: no score, not a spike
-            self.assertGreater(series[shift(d0, 5)]["v"], 0)      # next day compares within the new provider
+            # Warm-up within the new provider: scored once it has 3 days of its own.
+            self.assertEqual([series[shift(d0, i)]["v"] for i in (5, 6)], [None, None])
+            self.assertGreater(series[shift(d0, 7)]["v"], 0)      # consensus of the switch day and two more
             self.assertTrue(any(a["kind"] == "method" and a["start"] == shift(d0, 4) for a in s["annotations"]))
         finally:
             shutil.rmtree(tmp)

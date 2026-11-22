@@ -16,12 +16,13 @@
 
  "trim": 0.05,
  "lookback_days": 7,
+ "consensus_days": 3,
  "min_scored_keywords": 10,
  "min_valid_share": 0.8,
  "global_min_markets": 4,
 
  "reference_window_days": 90,
  "reference_min_days": 30,
- "bootstrap_reference": {"p50": 50.3, "p80": 55.9, "p95": 58.2, "p99": 63.0},
+ "bootstrap_reference": {"p50": 43.9, "p80": 46.0, "p95": 50.4, "p99": 54.5},
  "publish_days": 365
 }

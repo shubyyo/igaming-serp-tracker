@@ -58,12 +58,14 @@
   <p>Baskets were built from Ahrefs keyword data: commercial searches that affiliates and operators compete for, with one keyword per group of near-duplicates. Rules and how-to searches, calculators, brand names and news queries are left out. A few offshore and unlicensed terms are kept on purpose, because that is where parasite pages concentrate.</p>
   <p>The baskets are frozen. If a keyword ever has to change, the change is versioned and noted on the chart, because a different basket isn't comparable.</p>
 
-  <h2 id="score">From two SERPs to one number</h2>
-  <p>Each result is identified by its site: the host name, lowercased, without <code>www</code>. Google now hides many destination URLs behind its own redirect links, so the host is the part every data provider reports reliably. If one site holds two positions, the second is counted separately (<code>site.com#2</code>), so all ten positions keep their own identity. Then we compare today's list with the last verified list for the same keyword.</p>
+  <h2 id="score">From SERPs to one number</h2>
+  <p>Each result is identified by its site: the host name, lowercased, without <code>www</code>. Google now hides many destination URLs behind its own redirect links, so the host is the part every data provider reports reliably. If one site holds two positions, the second is counted separately (<code>site.com#2</code>), so all ten positions keep their own identity. Then we compare today's list with the keyword's recent consensus: each site's average position over its last 3 verified days, counting a day it was absent as position 11.</p>
+  <p>Why a consensus and not just yesterday: mobile results for these searches often flip between a few result sets from one fetch to the next, so a single day is a noisy baseline. Against a 3-day consensus, the day-to-day movements of different markets line up more often: on a seven-week pre-launch sample, their correlation rose from 0.26 to 0.35. A real Google change hits many markets at once, while fetch noise doesn't, so this means more signal and less noise. The cost is that a lasting change registers over a few days rather than all on day one.</p>
   <p>This means a site swapping one of its pages for another doesn't register as movement; a new site entering the top 10, or sites changing places, does.</p>
   <p>Each site that moved contributes its rank change, weighted by where it sits:</p>
-<pre>weight(r) = 1 / log2(1 + r)        r = the better of the two ranks
-D         = Σ weight(r) × |rank_today − rank_before|    (absent = position 11)
+<pre>E(site)   = mean rank over the last 3 verified days   (absent = position 11)
+weight(r) = 1 / log2(1 + r)        r = the better of E(site) and today's rank
+D         = Σ weight(r) × |rank_today − E(site)|        (absent today = position 11)
 v         = D / Dmax               Dmax = the value for a completely replaced top 10</pre>
   <p>A swap at positions 1–2 counts far more than a swap at 9–10, which matches how traffic is split. <code>v</code> runs from 0 (identical) to 1 (every site replaced).</p>
   <p>A market's daily value <code>V</code> is the 5% trimmed mean of <code>v</code> across its basket, scaled to 0–100. Trimming stops one exploding keyword from moving the whole market.</p>
@@ -103,7 +105,7 @@ v         = D / Dmax               Dmax = the value for a completely replaced to
   <ul>
     <li>One fetch a day from one data center's view of one location. Personalization, local packs and intraday swings aren't captured.</li>
     <li>Mobile only.</li>
-    <li>There's a warm-up: a keyword's first three days can't be checked against history. The index was published only after a 30-day baseline.</li>
+    <li>There's a warm-up: a keyword's first three days can't be checked against history and aren't scored, because there's no consensus yet. After a change of data provider, each keyword warms up again. The index was published only after a 30-day baseline.</li>
     <li>Rankings in regulated markets can move for licensing reasons (an operator blocked, a domain change) that have nothing to do with algorithm updates.</li>
     <li>External events, such as Google updates as reported by industry press, are annotated for context. They aren't inferred from the data.</li>
   </ul>
