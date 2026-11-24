@@ -229,7 +229,25 @@ def rebuild(store, markets, settings, annotations, site_dir, today=None):
                            provisional=bool(latest and latest["provisional"]))
         with open(os.path.join(badge_dir, code + ".svg"), "w", encoding="utf-8") as f:
             f.write(svg)
+    _write_sitemap(site_dir, settings, summary["latest_date"])
     return summary
+
+
+def _write_sitemap(site_dir, settings, latest_date):
+    """site/sitemap.xml: tools index, this tool (lastmod = latest data day) and its methodology."""
+    tool_url, method_url = settings.get("site_url"), settings.get("methodology_url")
+    if not tool_url:
+        return
+    root = "/".join(tool_url.split("/")[:3]) + "/"
+    rows = [(root, None), (tool_url, latest_date), (method_url, None)]
+    out = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for loc, lastmod in rows:
+        if loc:
+            out.append("  <url><loc>%s</loc>%s</url>" % (loc, "<lastmod>%s</lastmod>" % lastmod if lastmod else ""))
+    out.append("</urlset>")
+    with open(os.path.join(site_dir, "sitemap.xml"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(out) + "\n")
 
 
 def _write_csv(path, series):

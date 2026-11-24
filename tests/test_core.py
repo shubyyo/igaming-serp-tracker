@@ -213,6 +213,17 @@ class Pipeline(unittest.TestCase):
         xml.dom.minidom.parse(os.path.join(site, "badge", "uk.svg"))
         xml.dom.minidom.parseString(badge.render("A & B", None, None))
 
+    def test_sitemap(self):
+        settings = {"min_scored_keywords": 1, "bootstrap_reference": {"p50": 1, "p80": 2, "p95": 3, "p99": 4},
+                    "global_min_markets": 1, "site_url": "https://t.example/tool/",
+                    "methodology_url": "https://t.example/tool/methodology/"}
+        site = os.path.join(self.tmp, "site")
+        s = report.rebuild(self.store, [{"code": "uk", "name": "UK", "language_code": "en"}], settings, [], site)
+        doc = xml.dom.minidom.parse(os.path.join(site, "sitemap.xml"))
+        locs = [n.firstChild.data for n in doc.getElementsByTagName("loc")]
+        self.assertEqual(locs, ["https://t.example/", "https://t.example/tool/", "https://t.example/tool/methodology/"])
+        self.assertEqual(doc.getElementsByTagName("lastmod")[0].firstChild.data, s["latest_date"])
+
     def test_calibration_replaces_bootstrap_until_own_history(self):
         cal = {"p50": 2.0, "p80": 3.0, "p95": 5.0, "p99": 8.0, "source": "calibration"}
         settings = {"min_scored_keywords": 1, "bootstrap_reference": {"p50": 1, "p80": 2, "p95": 3, "p99": 4},
