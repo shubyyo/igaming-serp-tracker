@@ -13,6 +13,7 @@
  "price_per_task_usd": 0.0006,
  "serpapi_workers": 6,
  "collect_wait_minutes": 20,
+ "refetch_delay_minutes": 30,
 
  "trim": 0.05,
  "lookback_days": 7,

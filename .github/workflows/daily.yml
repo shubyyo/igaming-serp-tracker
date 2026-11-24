@@ -1,7 +1,11 @@
-name: Collect and re-fetch suspects
+name: Daily cycle
+# GitHub's scheduled runs can start hours late (10-12 h on 23-24 Nov 2026). Instead of three timed
+# steps, one idempotent job is triggered every hour: the first run that starts does the whole day
+# (collect, wait, re-fetch suspects, close) and later runs exit in seconds. Odd minutes avoid the
+# top-of-hour queue. The date is fixed when the job starts, so a late run cannot cross midnight.
 on:
   schedule:
-    - cron: "30 7 * * *"
+    - cron: "17 5-22 * * *"
   workflow_dispatch: {}
 permissions:
   contents: write
@@ -11,24 +15,28 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Collect first fetches, queue re-fetches
+      - name: Run today's cycle
         env:
           DATAFORSEO_LOGIN: ${{ secrets.DATAFORSEO_LOGIN }}
           DATAFORSEO_PASSWORD: ${{ secrets.DATAFORSEO_PASSWORD }}
           DATAFORSEO_BASE: ${{ vars.DATAFORSEO_BASE }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
           TRACKER_PROVIDER: ${{ vars.TRACKER_PROVIDER }}
-        run: python -m tracker collect
+        run: python -m tracker daily
       - name: Commit data
+        # Also after a failure or timeout: the saved state lets the next hourly run resume.
+        if: always()
         run: |
           git config user.name "serp-tracker-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A data site
-          git diff --cached --quiet || git commit -m "data: collect $(date -u +%F)"
+          git diff --cached --quiet && exit 0
+          git commit -m "data: $(date -u +%F) $(date -u +%H:%M)"
+          git pull --rebase origin main
           git push

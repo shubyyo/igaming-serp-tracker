@@ -31,20 +31,23 @@ Run `python -m tracker quota` to see the SerpApi plan, the searches left and how
 
 ## Daily cycle (UTC)
 
-| Time  | Workflow     | What happens |
-|-------|--------------|--------------|
-| 06:00 | `1-post`     | Queue one Standard-queue task per keyword (mobile, depth 10, `resolve_poisoned_results: true`). |
-| 07:30 | `2-collect`  | Pull the results, canonicalise URLs, run the guard, queue one re-fetch per suspect keyword, publish. |
-| 09:00 | `3-resolve`  | Pull the re-fetches, settle yesterday's quarantines, close the day, publish. |
+`.github/workflows/daily.yml` triggers `python -m tracker daily` every hour at :17 from 05:17 to 22:17. That one job runs the whole day:
 
-GitHub's cron can start runs late, sometimes by 15 minutes or more. `collect` waits up to `collect_wait_minutes` for tasks, and anything still unfinished is recorded as `missing`.
+1. **Fetch.** Take the first fetches (DataForSEO: queue them, then pull), canonicalise the URLs and run the guard.
+2. **Wait.** Pause `refetch_delay_minutes` (30), then re-fetch the suspect keywords.
+3. **Close.** Settle yesterday's quarantines, close the day, publish, and record `data/state/last_closed.json`.
+
+Every later trigger that day exits in seconds. If a run dies halfway, the next one resumes where it stopped: it never takes a second first-fetch, and a day left open from earlier is closed first.
+
+Why not three timed steps: GitHub's scheduled runs can start very late. On 23 Nov 2026 the 07:30 step ran at 19:26, and on 24 Nov none had run by 14:30. With one job triggered hourly, the first run that starts does the day, and the date is fixed when the job begins.
 
 ## Commands
 
 ```
 python -m tracker simulate --days 150   # synthetic run into ./sim (no API calls); preview sim/site
 python -m tracker cost                  # expected monthly spend for the configured basket
-python -m tracker post | collect | resolve
+python -m tracker daily                 # the whole cycle for today (what the workflow runs)
+python -m tracker post | collect | resolve   # the individual steps, by hand
 python -m tracker rebuild               # regenerate site/data and badges from data/days
 python -m unittest discover -s tests -t .
 ```

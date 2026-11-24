@@ -87,7 +87,7 @@ v         = D / Dmax               Dmax = the value for a completely replaced to
   <ol>
     <li><strong>Provider check.</strong> When the data comes from DataForSEO, its <code>resolve_poisoned_results</code> option is on, and any result it repaired is marked in our data. SerpApi has no equivalent, so only the next two stages apply to its data.</li>
     <li><strong>History check.</strong> We collect every host that appeared for the keyword in the last 7 days, counting the keyword's verified days and any fetch from that week. A fetch is <em>suspected</em> when at least 70% of its hosts are new to that set, or when it shows 3 or more Reddit, Quora or social results for a keyword that normally shows at most 1. One exception: a fetch that closely matches the previous verified day (Jaccard ≥ 0.7) is never suspected, because it's a continuation, not a jump. Mobile gambling SERPs change a lot from day to day, and often switch between a few result sets. Being taken over by sites unseen all week is the pattern this check looks for. On the pre-launch sample it flagged about 6% of fetches.</li>
-    <li><strong>Re-fetch.</strong> Each suspected keyword is fetched again about 90 minutes later.
+    <li><strong>Re-fetch.</strong> Each suspected keyword is fetched again about 30 minutes later.
       <ul>
         <li>If the second fetch looks normal, it's used (<em>recovered</em>).</li>
         <li>If both fetches look unusual but agree with each other, the result is <em>quarantined</em>. It's shown as provisional (a hollow dot on the chart) and checked against the next day. A next day that matches confirms it as a real shift; otherwise it's discarded.</li>

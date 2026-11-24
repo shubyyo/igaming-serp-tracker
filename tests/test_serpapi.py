@@ -106,6 +106,42 @@ class Cycle(unittest.TestCase):
         self.assertIsNone(self.store.load_state("pending"))
 
 
+class Daily(Cycle):
+    def daily(self, d, poisoned=()):
+        self.fake = FakeSerpApi()
+        self.fake.poisoned = set(poisoned)
+        with mock.patch.object(cli.time, "sleep") as sleep:
+            cli.cmd_daily(argparse.Namespace(date=d, force=False), self.store, self.settings, self.markets)
+        return sleep
+
+    def test_one_run_per_day(self):
+        d0 = "2026-11-01"
+        for i in range(4):
+            self.daily(shift(d0, i))
+        d4 = shift(d0, 4)
+        sleep = self.daily(d4, poisoned={"kw3"})
+        sleep.assert_called_once()                       # waited before re-fetching the suspect
+        self.assertEqual(self.store.entry(d4, "uk", "kw3")["status"], "recovered")
+        self.assertEqual(self.store.load_state("last_closed"), {"date": d4})
+        calls = FakeSerpApi.calls
+        self.daily(d4)                                   # a later hourly trigger: nothing to do
+        self.assertEqual(FakeSerpApi.calls, calls)
+
+    def test_resumes_after_interrupted_run(self):
+        d0 = "2026-11-01"
+        self.fake = FakeSerpApi()
+        cli.cmd_collect(argparse.Namespace(date=d0, force=False), self.store, self.settings, self.markets)
+        calls = FakeSerpApi.calls                        # killed after collect, before resolve
+        self.daily(d0)
+        self.assertEqual(FakeSerpApi.calls, calls)       # no second first-fetch
+        self.assertEqual(self.store.load_state("last_closed"), {"date": d0})
+        self.fake = FakeSerpApi()
+        cli.cmd_collect(argparse.Namespace(date=shift(d0, 1), force=False), self.store, self.settings, self.markets)
+        self.daily(shift(d0, 3))                         # a stale day is closed, then today runs
+        self.assertIsNotNone(self.store.load_day(shift(d0, 3)))
+        self.assertEqual(self.store.load_state("last_closed"), {"date": shift(d0, 3)})
+
+
 class ProviderSwitch(unittest.TestCase):
     def test_switch_day_is_rebased_and_annotated(self):
         tmp = tempfile.mkdtemp()
