@@ -5,10 +5,12 @@
 /igaming-serp-volatility/badge/*
   Cache-Control: public, max-age=3600
   Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
 
 /igaming-serp-volatility/data/*
   Cache-Control: public, max-age=600
   Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
 
 /igaming-serp-volatility/assets/*
   Cache-Control: public, max-age=3600
