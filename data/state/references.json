@@ -47,13 +47,13 @@
  },
  "global": {
   "2026-11": {
-   "days": 48,
+   "days": 46,
    "markets": 6,
    "n": 0,
-   "p50": 43.972,
-   "p80": 46.297,
-   "p95": 52.578,
-   "p99": 55.128,
+   "p50": 43.937,
+   "p80": 46.043,
+   "p95": 50.403,
+   "p99": 54.491,
    "sample": "pre-launch mobile Google SERP sample, 2026-10-02 to 2026-11-22",
    "source": "calibration"
   }
